@@ -1,6 +1,6 @@
-# NanoBanana PPT Skills
+# NanoBanana PPT Skills (官方库版)
 
-> 基于 AI 自动生成高质量 PPT 图片和视频的强大工具，支持智能转场和交互式播放
+> 基于 google-genai 官方库的 PPT 图片生成工具，代码简洁，支持自定义 base_url 第三方中转
 
 <div align="center">
 
@@ -30,13 +30,27 @@ https://github.com/user-attachments/assets/b394de21-2848-489a-8d33-a8e262e60f60
 
 ## 📖 简介
 
-NanoBanana PPT Skills 是一个强大的 AI 驱动的 PPT 生成工具，能够：
+**本版本特点：使用 google-genai 官方库，代码简洁，封装完善！**
+
+NanoBanana PPT Skills (官方库版) 是一个 AI 驱动的 PPT 生成工具，使用 Google 官方 SDK 调用 Gemini API。支持通过 `http_options` 配置自定义 `base_url`，兼容第三方中转服务。
+
+### 🔧 技术实现
+
+| 特性 | 说明 |
+|------|------|
+| **SDK** | google-genai 官方库 |
+| **认证方式** | SDK 内部处理 |
+| **响应格式** | 直接返回图片对象 |
+| **图片获取** | SDK 自动解析 |
+| **代码量** | 最少，约 30 行核心代码 |
+
+### 🎯 核心功能
 
 - 📄 **智能分析文档**，自动提取核心要点并规划 PPT 结构
-- 🎨 **生成高质量图片**，使用 Google Nano Banana Pro（Gemini 3 Pro Image Preview）
+- 🎨 **生成高质量图片**，使用 Google Gemini 官方 SDK
+- 📝 **代码简洁**，封装完善，易于维护
+- 🔌 **支持中转**，通过 http_options 配置自定义 base_url
 - 🎬 **自动生成转场视频**，使用可灵 AI 创建流畅的页面过渡动画
-- 🎮 **交互式视频播放器**，支持键盘控制、循环预览、智能转场
-- 🎥 **完整视频导出**，一键合成包含所有转场的完整 PPT 视频
 
 ### 🎨 视觉风格
 
@@ -77,7 +91,10 @@ NanoBanana PPT Skills 是一个强大的 AI 驱动的 PPT 生成工具，能够�
 
 ### 🛠️ 技术亮点
 
-- ✅ Google Nano Banana Pro（Gemini 3 Pro Image Preview）图像生成
+- ✅ **google-genai 官方库** - Google 官方 SDK，封装完善
+- ✅ **http_options 支持** - 可配置自定义 base_url 第三方中转
+- ✅ **直接返回图片对象** - SDK 自动解析，无需手动处理
+- ✅ **代码简洁** - 核心代码约 30 行，易于维护
 - ✅ 可灵 AI API 集成（视频生成、数字人、主体库）
 - ✅ FFmpeg 视频合成与参数统一
 - ✅ 完整的提示词工程和风格管理系统
@@ -112,11 +129,14 @@ NanoBanana PPT Skills 是一个强大的 AI 驱动的 PPT 生成工具，能够�
 5. 编辑 .env 文件，填入我的 API 密钥：
 
    GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+   GEMINI_BASE_URL=https://your-relay-url  # 可选，第三方中转地址
+   GEMINI_MODEL=gemini-3-pro-image-preview
    KLING_ACCESS_KEY=YOUR_KLING_ACCESS_KEY
    KLING_SECRET_KEY=YOUR_KLING_SECRET_KEY
 
    注意：
-   - GEMINI_API_KEY: Google AI API 密钥（必需，用于生成 PPT 图片）
+   - GEMINI_API_KEY: API 密钥（必需，用于生成 PPT 图片）
+   - GEMINI_BASE_URL: 第三方中转地址（可选，不填则用官方地址）
    - KLING_ACCESS_KEY 和 KLING_SECRET_KEY: 可灵 AI 密钥（可选，用于生成转场视频）
 
 6. 验证安装：
@@ -126,13 +146,14 @@ NanoBanana PPT Skills 是一个强大的 AI 驱动的 PPT 生成工具，能够�
 
 我的 API 密钥：
 - GEMINI_API_KEY: YOUR_GEMINI_API_KEY_HERE
+- GEMINI_BASE_URL: YOUR_RELAY_URL_HERE (可选)
 - KLING_ACCESS_KEY: YOUR_KLING_ACCESS_KEY_HERE (可选)
 - KLING_SECRET_KEY: YOUR_KLING_SECRET_KEY_HERE (可选)
 ```
 
 **使用说明**：
 1. 先获取 API 密钥：
-   - **必需**: [Google AI API 密钥](https://aistudio.google.com/apikey)
+   - **必需**: [Google AI API 密钥](https://aistudio.google.com/apikey) 或第三方中转
    - **可选**: [可灵 AI API 密钥](https://klingai.com)（用于视频转场功能）
 2. 复制上面的提示词
 3. 将 `YOUR_GEMINI_API_KEY_HERE` 等替换为你的真实 API 密钥
@@ -191,8 +212,14 @@ nano .env  # 或使用你喜欢的编辑器
 在 `.env` 文件中填入你的 API 密钥：
 
 ```bash
-# Google AI API 密钥（必需）
+# Gemini API 密钥（必需）
 GEMINI_API_KEY=your_gemini_api_key_here
+
+# 第三方中转地址（可选，不填则用官方地址）
+GEMINI_BASE_URL=https://your-relay-url
+
+# 模型名称（可选，默认 gemini-3-pro-image-preview）
+GEMINI_MODEL=gemini-3-pro-image-preview
 
 # 可灵 AI API 密钥（可选，用于视频转场功能）
 KLING_ACCESS_KEY=your_kling_access_key_here
@@ -314,8 +341,14 @@ Skill 会智能查找 `.env` 文件，按以下优先级：
 ```bash
 # 在 Skill 目录下创建 .env 文件
 cat > ~/.claude/skills/ppt-generator/.env << EOF
-# Google AI API 密钥（必需）
+# Gemini API 密钥（必需）
 GEMINI_API_KEY=your_gemini_api_key_here
+
+# 第三方中转地址（可选，不填则用官方地址）
+GEMINI_BASE_URL=https://your-relay-url
+
+# 模型名称（可选）
+GEMINI_MODEL=gemini-3-pro-image-preview
 
 # 可灵 AI API 密钥（可选，用于视频功能）
 KLING_ACCESS_KEY=your_kling_access_key_here
@@ -680,12 +713,21 @@ ppt-generator/
 
 **A**:
 - **Google AI API**: 访问 [Google AI Studio](https://aistudio.google.com/apikey)，登录后即可创建
+- **第三方中转**: 联系中转服务商获取密钥
 - **可灵 AI API**: 访问 [可灵 AI 开放平台](https://klingai.com)，注册并创建应用获取密钥
+
+### Q: 如何配置第三方中转？
+
+**A**: 在 `.env` 文件中配置：
+- `GEMINI_BASE_URL`: 中转地址（不要带 /v1 后缀）
+- `GEMINI_API_KEY`: 中转服务提供的密钥
+
+官方库会自动通过 `http_options` 使用自定义地址。
 
 ### Q: 是否必须配置可灵 AI 密钥？
 
 **A**: 不是必须的。
-- **只生成 PPT 图片**：只需要 GEMINI_API_KEY
+- **只生成 PPT 图片**：只需要 GEMINI_API_KEY（以及可选的 GEMINI_BASE_URL）
 - **生成转场视频**：需要 KLING_ACCESS_KEY 和 KLING_SECRET_KEY
 
 ### Q: 视频合成失败怎么办？
