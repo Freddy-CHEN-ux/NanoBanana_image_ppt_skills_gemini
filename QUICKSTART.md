@@ -1,19 +1,27 @@
-# 快速使用指南
+# 快速使用指南 (官方库版)
 
 ## 🚀 5分钟快速上手
 
 ### 步骤1: 设置API密钥
 
 ```bash
-export GEMINI_API_KEY='your-google-ai-api-key'
+# 创建 .env 文件
+cp .env.example .env
+
+# 编辑 .env 文件，填入密钥
+GEMINI_API_KEY=your-gemini-api-key
+GEMINI_BASE_URL=https://your-relay-url-here  # 可选，使用中转时配置
+GEMINI_MODEL=gemini-3-pro-image-preview
 ```
 
-**获取API密钥**: 访问 [Google AI Studio](https://makersuite.google.com/app/apikey)
+**获取API密钥**: 访问 [Google AI Studio](https://aistudio.google.com/apikey)
+
+**使用第三方中转**: 官方库通过 `http_options` 参数配置中转地址
 
 ### 步骤2: 安装依赖
 
 ```bash
-pip install google-genai pillow
+pip install google-genai pillow python-dotenv
 ```
 
 ### 步骤3: 准备文档
@@ -183,10 +191,22 @@ echo "所有版本生成完成！"
 ### Q: 生成失败怎么办？
 
 A: 检查以下几点：
-1. API密钥是否正确设置
-2. 网络连接是否正常
-3. Python依赖是否完整安装
-4. 查看详细错误信息
+1. `.env` 文件中 GEMINI_API_KEY 是否正确设置
+2. 如使用中转，检查 GEMINI_BASE_URL 是否正确
+3. 网络连接是否正常
+4. Python依赖是否完整安装（特别是 google-genai）
+5. 查看详细错误信息
+
+### Q: 如何配置第三方中转服务？
+
+A: 官方库通过 `http_options` 参数配置中转：
+```python
+client = genai.Client(
+    api_key=api_key,
+    http_options={"api_endpoint": base_url}
+)
+```
+在 `.env` 中设置 `GEMINI_BASE_URL` 即可自动配置。
 
 ### Q: 可以生成中文内容吗？
 
